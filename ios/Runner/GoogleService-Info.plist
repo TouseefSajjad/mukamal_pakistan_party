@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCzzM1heT3HLnu4yCAGNG3P2JsZ6lnj_LY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>14636981952</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mpp.mukammalpakistanparty</string>
+	<key>PROJECT_ID</key>
+	<string>mukammal-pakistan-party</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mukammal-pakistan-party.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:14636981952:ios:7caf223f808b0ed5dd5725</string>
+</dict>
+</plist>
