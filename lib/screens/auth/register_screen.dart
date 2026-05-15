@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login_screen.dart';
-import 'package:mukammalpakistanparty/ config/app_theme.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -22,21 +21,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> registerUser() async {
     if (nameController.text.isEmpty ||
         emailController.text.isEmpty ||
-        passwordController.text.isEmpty) {
-      return;
-    }
+        passwordController.text.isEmpty) return;
 
     setState(() => isLoading = true);
 
     try {
-      // 1. Create Auth User
       UserCredential userCredential =
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      // 2. Save user in Firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -50,12 +45,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'joined_at': Timestamp.now(),
       });
 
-      // 3. Success message
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Registration Successful")),
       );
 
-      // 4. Go to login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -69,78 +64,174 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => isLoading = false);
   }
 
+  // ✅ FIXED INPUT DECORATION (BLACK TEXT + GREEN THEME)
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: Colors.black), // ✅ FIX
+
+      prefixIcon: Icon(icon, color: Colors.green),
+
+      filled: true,
+      fillColor: Colors.white,
+
+      hintStyle: const TextStyle(color: Colors.black54),
+
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.green.shade200),
+      ),
+
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.green),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundGray,
-      body: Center(
+      backgroundColor: Colors.white,
+
+      body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Text("Register", style: AppTheme.heading),
 
               const SizedBox(height: 20),
 
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  hintText: "Full Name",
-                  prefixIcon: Icon(Icons.person),
-                ),
+              const Icon(
+                Icons.person_add_alt_1,
+                size: 80,
+                color: Colors.green,
               ),
 
               const SizedBox(height: 10),
 
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  hintText: "Email",
-                  prefixIcon: Icon(Icons.email),
+              const Text(
+                "Create Account",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
 
-              TextField(
-                controller: phoneController,
-                decoration: const InputDecoration(
-                  hintText: "Phone",
-                  prefixIcon: Icon(Icons.phone),
-                ),
+              const Text(
+                "Join us by filling the form below",
+                style: TextStyle(color: Colors.black54),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
 
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: "Password",
-                  prefixIcon: Icon(Icons.lock),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              ElevatedButton(
-                style: AppTheme.primaryButton,
-                onPressed: isLoading ? null : registerUser,
-                child: isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Register"),
-              ),
-
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const LoginScreen(),
+              // FORM CARD
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.green.shade100),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.withOpacity(0.08),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
                     ),
-                  );
-                },
-                child: const Text("Already have account? Login"),
+                  ],
+                ),
+                child: Column(
+                  children: [
+
+                    TextField(
+                      controller: nameController,
+                      style: const TextStyle(color: Colors.black), // ✅ FIX
+                      decoration:
+                      _inputDecoration("Full Name", Icons.person),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    TextField(
+                      controller: emailController,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _inputDecoration("Email", Icons.email),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _inputDecoration("Phone", Icons.phone),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _inputDecoration("Password", Icons.lock),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: isLoading ? null : registerUser,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                            color: Colors.white)
+                            : const Text(
+                          "Register",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Already have an account?",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const LoginScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

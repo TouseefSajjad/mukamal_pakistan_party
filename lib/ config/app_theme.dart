@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Primary professional color
+  // Primary colors
   static const Color primaryGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFFC8E6C9);
 
@@ -9,16 +9,16 @@ class AppTheme {
   static const Color accentPink = Color(0xFFFF4081);
   static const Color criticalRed = Color(0xFFD32F2F);
 
-  // Background & surface
+  // Background
   static const Color backgroundWhite = Colors.white;
   static const Color backgroundGray = Color(0xFFF5F5F5);
 
   // Text colors
-  static const Color textPrimary = Colors.black87;
-  static const Color textSecondary = Colors.black54;
+  static const Color textPrimary = Colors.black;
+  static const Color textSecondary = Colors.black87;
   static const Color textOnPrimary = Colors.white;
 
-  // Button Styles
+  // Buttons
   static ButtonStyle primaryButton = ElevatedButton.styleFrom(
     backgroundColor: primaryGreen,
     foregroundColor: textOnPrimary,
@@ -49,7 +49,7 @@ class AppTheme {
     ),
   );
 
-  // Text Styles
+  // Text styles
   static const TextStyle heading = TextStyle(
     color: textPrimary,
     fontSize: 22,
@@ -78,28 +78,62 @@ class AppTheme {
     fontWeight: FontWeight.w500,
   );
 
-  // Input Decoration Theme
+  // Input Decoration (GLOBAL FIX)
   static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     filled: true,
-    fillColor: backgroundWhite,
-    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    fillColor: Colors.white,
+
+    contentPadding: const EdgeInsets.symmetric(
+      vertical: 12,
+      horizontal: 16,
+    ),
+
+    hintStyle: const TextStyle(
+      color: Colors.black54,
+      fontSize: 14,
+    ),
+
+    labelStyle: const TextStyle(
+      color: Colors.black87,
+      fontSize: 14,
+    ),
+
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: primaryGreen),
     ),
+
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.black26),
+    ),
+
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: primaryGreen, width: 2),
+      borderSide: const BorderSide(
+        color: primaryGreen,
+        width: 2,
+      ),
     ),
+
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: criticalRed),
     ),
+
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(
+        color: criticalRed,
+        width: 2,
+      ),
+    ),
   );
 
-  // ThemeData for app
+  // FULL THEME DATA (IMPORTANT FIXES HERE)
   static ThemeData themeData = ThemeData(
     useMaterial3: true,
+
     primaryColor: primaryGreen,
     scaffoldBackgroundColor: backgroundGray,
 
@@ -117,10 +151,28 @@ class AppTheme {
     inputDecorationTheme: inputDecorationTheme,
 
     textTheme: const TextTheme(
-      titleLarge: heading,
-      titleMedium: subHeading,
-      bodyLarge: bodyLarge,
-      bodyMedium: bodySmall,
+      displayLarge: TextStyle(color: textPrimary),
+      titleLarge: TextStyle(color: textPrimary),
+      titleMedium: TextStyle(color: textPrimary),
+      bodyLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+      ),
+      bodySmall: TextStyle(
+        color: Colors.black87,
+        fontSize: 12,
+      ),
+    ),
+
+    // FIX: prevents Material 3 weird light text issues in inputs
+    textSelectionTheme: const TextSelectionThemeData(
+      cursorColor: primaryGreen,
+      selectionColor: Color(0x552E7D32),
+      selectionHandleColor: primaryGreen,
     ),
 
     colorScheme: const ColorScheme.light(
